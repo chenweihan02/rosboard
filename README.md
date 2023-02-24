@@ -1,5 +1,38 @@
 # ROSboard 
 
+---
+Author: [dheera](https://github.com/dheera/rosboard)
+
+An error will be reported if there is an undefined data class in the roscopic
+in index.js, use trycatch will resolve this error
+
+```js
+function treeifyPaths(paths) {
+  // turn a bunch of ros topics into a tree
+  let result = [];
+  let level = {result};
+
+  paths.forEach(path => {
+    path.split('/').reduce((r, name, i, a) => {
+      if(!r[name]) {
+        r[name] = {result: []};
+        //!!!
+        try {
+          r.result.push({name, children: r[name].result})
+        } catch (error) {
+          console.log('cwh push', error)
+        }
+      }
+      
+      return r[name];
+    }, level)
+  });
+  return result;
+}
+```
+
+
+---
 ROS node that runs a web server on your robot.
 Run the node, point your web browser at http://your-robot-ip:8888/ and you get nice visualizations.
 
